@@ -78,19 +78,19 @@ sudo sed -i "s/^HISTORY=.*/HISTORY=$NEW_HISTORY/" $SYSSTAT_CONF
 sudo systemctl restart sysstat
 echo "sar log 기록 주기를 default:10분 -> 2분으로 변경하였습니다."
 
-################# ssh setting / default port 22->20022 , apply both ssh_config and sshd_config #############
+################# ssh setting / default port 22-> "사용할 포트" , apply both ssh_config and sshd_config #############
 SSHD_CONFIG="/etc/ssh/sshd_config"
 SSH_CONFIG="/etc/ssh/ssh_config"
 
 sudo cp $SSHD_CONFIG $SSHD_CONFIG.bak
 sudo cp $SSH_CONFIG $SSH_CONFIG.bak
 
-sudo sed -i '/^#Port/c\Port 20022' $SSHD_CONFIG
-sudo sed -i '/^#   Port/c\Port 20022' $SSH_CONFIG
+sudo sed -i '/^#Port/c\Port "사용할 포트"' $SSHD_CONFIG
+sudo sed -i '/^#   Port/c\Port "사용할 포트"' $SSH_CONFIG
 
 sudo systemctl restart sshd
 
-echo "ssh 기본 포트를 22에서 20022로 변경하였습니다"
+echo "ssh 기본 포트를 22에서 "사용할 포트"로 변경하였습니다"
 
 ################## setting chrony ################################
 
@@ -102,10 +102,10 @@ set_ntp_servers() {
     local IP=$1
     case $IP in
         172.*)
-            NEW_NTP_SERVERS="server 190.1.5.46 iburst\nserver 190.1.5.47 iburst"
+            NEW_NTP_SERVERS="server (NTP IP) iburst\nserver (NTP IP) iburst"
             ;;
         203.*)
-            NEW_NTP_SERVERS="server 203.247.66.246 iburst"
+            NEW_NTP_SERVERS="server (NTP IP) iburst"
             ;;
         *)
             echo "유효하지 않은 네트워크 주소입니다."
